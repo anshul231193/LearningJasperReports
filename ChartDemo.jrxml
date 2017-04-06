@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ChartDemo" language="groovy" pageWidth="792" pageHeight="792" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="8587ef80-4796-458e-9cb8-bbf8b20596c6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="134"/>
+	<property name="ireport.y" value="288"/>
+	<queryString>
+		<![CDATA[SELECT pg.merchant_id,
+count(p.name) as count_product,
+m.name as merchant_name,
+p.name as product_name,
+pg.name as product_group_name,
+pg.description,pg.status_id
+FROM couponplatform.product as p
+INNER JOIN
+couponplatform.productgroup as pg
+on p.product_group_id=pg.product_group_id
+INNER JOIN
+merchant as m
+on m.id=pg.merchant_id
+WHERE p.name IS NOT NULL
+GROUP BY m.id;]]>
+	</queryString>
+	<field name="merchant_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="count_product" class="java.lang.Long"/>
+	<field name="merchant_name" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="product_group_name" class="java.lang.String"/>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="status_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="752">
+			<barChart>
+				<chart>
+					<reportElement x="0" y="0" width="317" height="274" uuid="1b78f96d-6495-4295-ba0a-a4f6e3073dae"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Dummy Series"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{merchant_name}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{count_product}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot labelRotation="-40.0"/>
+					<itemLabel/>
+					<categoryAxisFormat labelRotation="-40.0">
+						<axisFormat>
+							<tickLabelFont>
+								<font size="9"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA[$F{count_product}]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="0"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<pieChart>
+				<chart>
+					<reportElement x="435" y="0" width="317" height="274" uuid="64b96a0f-3751-4119-b57b-48f72481a114"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{merchant_name}]]></keyExpression>
+					<valueExpression><![CDATA[$F{count_product}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<lineChart>
+				<chart>
+					<reportElement x="124" y="343" width="572" height="213" uuid="ff81d268-1f9a-416f-9633-c705bc0584c7"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Dummy Series"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{merchant_name}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{count_product}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</linePlot>
+			</lineChart>
+		</band>
+	</summary>
+</jasperReport>

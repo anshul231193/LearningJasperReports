@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GroupingTable" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9c821024-19ad-467f-b0cb-8f56537551c2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Grouping of Tables" uuid="9416e742-9828-4bda-85d2-469f72e0205a">
+		<queryString language="SQL">
+			<![CDATA[SELECT pg.merchant_id,
+m.name as merchant_name,
+p.name as product_name,
+pg.name as product_group_name,
+pg.description,pg.status_id
+FROM couponplatform.product as p
+INNER JOIN
+couponplatform.productgroup as pg
+on p.product_group_id=pg.product_group_id
+INNER JOIN
+merchant as m
+on m.id=pg.merchant_id
+WHERE p.name IS NOT NULL;]]>
+		</queryString>
+		<field name="merchant_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="merchant_name" class="java.lang.String"/>
+		<field name="product_name" class="java.lang.String"/>
+		<field name="product_group_name" class="java.lang.String"/>
+		<field name="description" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="status_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<variable name="status" class="java.lang.String">
+			<variableExpression><![CDATA[$F{status_id}==1?"Active":"Out of stock"]]></variableExpression>
+		</variable>
+		<group name="product_group_name">
+			<groupExpression><![CDATA[$F{product_group_name}]]></groupExpression>
+		</group>
+		<group name="merchant_name">
+			<groupExpression><![CDATA[$F{merchant_name}]]></groupExpression>
+		</group>
+	</subDataset>
+	<queryString>
+		<![CDATA[select 1;]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="201" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="0" y="0" width="360" height="201" uuid="b51ea4e4-7566-4e12-b469-7646d4eba570"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Grouping of Tables" uuid="20c089d6-9845-445f-9b98-bc8e9be0eaa1">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="fb5e63d8-86e4-42a5-b193-020472c1b6be">
+						<jr:groupHeader groupName="product_group_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1">
+								<textField hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+									<reportElement x="0" y="0" width="90" height="30" uuid="47950fa7-11c7-4449-ae4f-24f6ed8b945b"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[""+$F{product_group_name}]]></textFieldExpression>
+									<hyperlinkParameter name="_report">
+										<hyperlinkParameterExpression><![CDATA["/reports/Merchant_Group"]]></hyperlinkParameterExpression>
+									</hyperlinkParameter>
+								</textField>
+							</jr:cell>
+						</jr:groupHeader>
+						<jr:groupHeader groupName="merchant_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1">
+								<textField hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+									<reportElement x="0" y="0" width="90" height="30" uuid="15a8d5f2-338d-4af2-b3c0-ed8aa27ac368"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[""+$F{merchant_name}]]></textFieldExpression>
+									<hyperlinkParameter name="_report">
+										<hyperlinkParameterExpression><![CDATA["/reports/revision"]]></hyperlinkParameterExpression>
+									</hyperlinkParameter>
+									<hyperlinkParameter name="merchant_id">
+										<hyperlinkParameterExpression><![CDATA[$F{merchant_id}]]></hyperlinkParameterExpression>
+									</hyperlinkParameter>
+								</textField>
+							</jr:cell>
+						</jr:groupHeader>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="f2feadca-3e0a-48b4-895d-79ab0e4063f2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Merchant Id]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="19661bb2-f8c5-4a60-9fca-da8248478128"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{merchant_id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="108" uuid="529f7141-edec-43e1-8081-c05058504494">
+						<jr:groupHeader groupName="product_group_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:groupHeader groupName="merchant_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="108" height="30" uuid="d766d785-3cc5-42fe-b8ef-a7cc92d205cd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Merchant Name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="108" height="20" uuid="71a0965c-ccf1-4f11-b4ec-cfad8114b010"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{merchant_name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="8f51f4e4-0260-4d18-9d8a-ec4b00f5ee31">
+						<jr:groupHeader groupName="product_group_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:groupHeader groupName="merchant_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="52576b9e-b3c5-47ac-8064-55f57217e54a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Product Name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="5dfe4458-3c73-4761-a5cd-d1ced9714b8d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="ac375733-f9fc-4727-b4be-f496f64adc68">
+						<jr:groupHeader groupName="product_group_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:groupHeader groupName="merchant_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="a3b195ea-1c6e-436c-9373-5a5d2cf1a18d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Product Group Name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="859f70bc-9a92-4f43-b28f-ccd408c21329"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{product_group_name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="8246ec20-8bb1-45fc-9891-d79573fed4ad">
+						<jr:groupHeader groupName="product_group_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:groupHeader groupName="merchant_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="a81f98be-dd24-4fa0-ac47-54c46340005e"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Description]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="16c40c86-6b96-4a29-bc7e-a61603f8f9a1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="a326d368-13b0-444e-a859-e47226aa350c">
+						<jr:groupHeader groupName="product_group_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:groupHeader groupName="merchant_name">
+							<jr:cell style="table 1_TH" height="30" rowSpan="1"/>
+						</jr:groupHeader>
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="21fb9784-9a90-4ab9-a2b0-d6b0592e63ca"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Status]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="6f4f5b12-d116-4716-a0ab-d7ff70802dff"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{status}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

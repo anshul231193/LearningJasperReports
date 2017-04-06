@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="revisionReport2" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f451344e-b1a7-42dd-81c5-23bd23bc5692">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="152"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/revision"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/services/repository"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="RevisionDataset" uuid="5b3037e0-5a11-426e-a57c-741ea6b1ba8f">
+		<parameter name="merchant_id" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[$F{merchant_id}]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT pg.merchant_id,
+m.name as merchant_name,
+p.name as product_name,
+pg.name as product_group_name,
+pg.description,pg.status_id
+FROM couponplatform.product as p
+INNER JOIN
+couponplatform.productgroup as pg
+on p.product_group_id=pg.product_group_id
+INNER JOIN
+merchant as m
+on m.id=pg.merchant_id
+WHERE p.name IS NOT NULL and
+m.id=$P{merchant_id};]]>
+		</queryString>
+		<field name="merchant_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="merchant_name" class="java.lang.String"/>
+		<field name="product_name" class="java.lang.String"/>
+		<field name="product_group_name" class="java.lang.String"/>
+		<field name="description" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="status_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<group name="group1">
+			<groupExpression><![CDATA[$F{product_group_name}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="dataset1" uuid="ee85bb7e-7c26-447e-934e-7b2f92f8b544">
+		<parameter name="merchant_id" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT pg.merchant_id,
+m.name as merchant_name,
+p.name as product_name,
+pg.name as product_group_name,
+pg.description,pg.status_id
+FROM couponplatform.product as p
+INNER JOIN
+couponplatform.productgroup as pg
+on p.product_group_id=pg.product_group_id
+INNER JOIN
+merchant as m
+on m.id=pg.merchant_id
+WHERE p.name IS NOT NULL and
+m.id=$P{merchant_id};]]>
+		</queryString>
+		<field name="merchant_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="merchant_name" class="java.lang.String"/>
+		<field name="product_name" class="java.lang.String"/>
+		<field name="product_group_name" class="java.lang.String"/>
+		<field name="description" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="status_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="merchant_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/anshul/Downloads/LearningJasperReports/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 1;]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="441" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="0" width="263" height="146" uuid="696ae90d-050b-4a75-b0b0-735be6013db2"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RevisionDataset" uuid="c35dc958-77e0-40b5-bab1-5cf4cd93d524">
+						<datasetParameter name="merchant_id">
+							<datasetParameterExpression><![CDATA[$P{merchant_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="049295ad-17f6-47d8-b077-2840b40b9000">
+						<jr:tableHeader style="table_TH" height="60" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="60" uuid="d4d8deed-2c99-4156-a847-8e2b9a7c7e8f"/>
+								<textFieldExpression><![CDATA[$F{merchant_name}]]></textFieldExpression>
+							</textField>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="1" rowSpan="1"/>
+						<jr:groupHeader groupName="group1">
+							<jr:cell height="30" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="30" uuid="928fd4a9-8240-448f-8af9-0b8a4b54b3ec"/>
+									<textFieldExpression><![CDATA[$F{product_group_name}]]></textFieldExpression>
+								</textField>
+							</jr:cell>
+						</jr:groupHeader>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="9fa608af-8129-471a-a187-c7e1e6b98a8e"/>
+								<text><![CDATA[merchant_id]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="27b6b2e3-bd82-47e7-9330-c346211249d1"/>
+								<textFieldExpression><![CDATA[$F{merchant_id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="e5fc0b78-2e56-4cd3-a3d6-53d045a32462">
+						<jr:tableHeader style="table_TH" height="60" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="1" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="2b4b4d14-bef4-4a7a-bba4-5549b93a6216"/>
+								<text><![CDATA[merchant_name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="25bfda36-e356-4823-9b72-fee97ff6ca91"/>
+								<textFieldExpression><![CDATA[$F{merchant_name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="b0bb2ae3-a72d-4edf-9bfe-337401d02be2">
+						<jr:tableHeader style="table_TH" height="60" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="1" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="2488063e-7e9d-4533-bd0b-734279db1d71"/>
+								<text><![CDATA[product_name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="0e4f6f89-fd58-43c2-bf20-1c54d995a7bb"/>
+								<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="99db2040-a13f-4af7-a0eb-2e378177a655">
+						<jr:tableHeader style="table_TH" height="60" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="1" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="9a93bf78-5a68-44ba-865b-e2074b65af99"/>
+								<text><![CDATA[product_group_name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="bafbc02a-f5c9-407a-a275-a17023d4b473"/>
+								<textFieldExpression><![CDATA[$F{product_group_name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="67faed16-4ba1-43fc-acda-5195be84d997">
+						<jr:tableHeader style="table_TH" height="60" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="1" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="b6a221df-205c-4437-afb5-ee8861ae14f9"/>
+								<text><![CDATA[description]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="5d1b76f4-af2d-42cd-8523-c347ae8895d3"/>
+								<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="49d4cef2-3f80-4d25-ab89-9c0e413b2be2">
+						<jr:tableHeader style="table_TH" height="60" rowSpan="1"/>
+						<jr:tableFooter style="table_TH" height="1" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="0aeaef6e-e99b-4fb9-b957-0755f9121b40"/>
+								<text><![CDATA[status_id]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="a4cf2e6e-7e74-4b30-ab79-8fbc67dfe2a4"/>
+								<textFieldExpression><![CDATA[$F{status_id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<frame>
+				<reportElement x="0" y="316" width="293" height="114" uuid="322b0afd-8356-4241-a5dd-b9432f7ea2e3"/>
+				<componentElement>
+					<reportElement x="0" y="14" width="293" height="74" uuid="1d1101ba-aa9f-4fe8-b152-bf609c10b421"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset1" uuid="efa2f25f-1078-4ccb-9ac5-1460051c8731">
+							<datasetParameter name="merchant_id">
+								<datasetParameterExpression><![CDATA[$P{merchant_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="74" width="293">
+							<staticText>
+								<reportElement x="0" y="5" width="82" height="20" uuid="0d6e58b0-64cb-40f8-8d6e-386d7350cdb1"/>
+								<text><![CDATA[merchant_name]]></text>
+							</staticText>
+							<textField>
+								<reportElement x="0" y="25" width="82" height="20" uuid="f6d0b3fd-26d7-4f39-b651-6c1514476528"/>
+								<textFieldExpression><![CDATA[$F{merchant_name}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement x="93" y="5" width="89" height="20" uuid="e57ba497-71dd-4e98-aa0e-a8a7b39e927e"/>
+								<text><![CDATA[product_name]]></text>
+							</staticText>
+							<textField>
+								<reportElement x="93" y="25" width="89" height="20" uuid="39ac24b9-a176-4cdd-8948-199e063c61cc"/>
+								<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement x="184" y="5" width="98" height="20" uuid="007e4bb0-9134-4896-b5e4-6547e7e7be06"/>
+								<text><![CDATA[description]]></text>
+							</staticText>
+							<textField>
+								<reportElement x="182" y="25" width="100" height="20" uuid="00b287ee-104d-4455-b8a4-191a44412508"/>
+								<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+			<subreport>
+				<reportElement x="293" y="316" width="200" height="100" uuid="2b32051b-d49b-470e-955a-c2165140b7ed"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:revisionReport2_subreport2.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
