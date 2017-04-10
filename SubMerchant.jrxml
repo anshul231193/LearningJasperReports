@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubMerchant" language="groovy" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d9021033-346a-414e-8757-2db1f3d86e17">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" style="style" hAlign="Center" vAlign="Middle" rotation="Left">
+		<paragraph lineSpacing="1_1_2"/>
+	</style>
+	<parameter name="merchant_id" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$F{merchant_id}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT pg.merchant_id,
+m.name as merchant_name,
+p.name as product_name,
+pg.name as product_group_name,
+pg.description,pg.status_id
+FROM couponplatform.product as p
+INNER JOIN
+couponplatform.productgroup as pg
+on p.product_group_id=pg.product_group_id
+INNER JOIN
+merchant as m
+on m.id=pg.merchant_id
+WHERE p.name IS NOT NULL and
+m.id=$P{merchant_id};]]>
+	</queryString>
+	<field name="merchant_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="merchant_name" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="product_group_name" class="java.lang.String"/>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="status_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="return" class="java.lang.String" resetType="Column">
+		<variableExpression><![CDATA[$F{product_name}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="2" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="20" uuid="08e0ee2d-e79f-40bd-9c64-d67784386b93"/>
+				<text><![CDATA[description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4f94517a-f9ad-4b35-95ec-7b24af52b1b3"/>
+				<text><![CDATA[product_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="a470426e-9d49-4a83-b3f7-63b4cb6b1364"/>
+				<text><![CDATA[product_group_name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="98e0a1f3-3520-421e-a832-0cf502ab2d51"/>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="ec156e5b-3a16-480a-8e96-d0954521ac25"/>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="87f46208-f3c0-427a-bf8a-21c5bbaf6166"/>
+				<textFieldExpression><![CDATA[$F{product_group_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
