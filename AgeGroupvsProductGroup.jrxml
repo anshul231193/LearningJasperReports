@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AgeGroupvsProductGroup" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="52eadd9b-7bcb-4a88-83da-cca9a432e4d3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+	  user.gender as Gender,
+	case
+		when YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35 then '26-35'
+		when YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45 then '36-45'
+		when YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55 then '46-55'
+		else '56-65' end as AgeGroup,
+	SUM(IF(productgroup.name = 'Drink',basketitem.original_item_price, NULL)) as 'Drink',
+	SUM(IF(productgroup.name = 'Electronic',basketitem.original_item_price, NULL)) as 'Electronic',
+	SUM(IF(productgroup.name = 'Food',basketitem.original_item_price, NULL)) as 'Food',
+	SUM(IF(productgroup.name = 'HouseHold',basketitem.original_item_price, NULL)) as 'HouseHold',
+	SUM(IF(productgroup.name = 'NewsPaper',basketitem.original_item_price, NULL)) as 'NewsPapers'
+	FROM
+	  productgroup
+	INNER JOIN basketitem
+	  ON basketitem.product_group_id=productgroup.id
+	INNER JOIN basket
+	  ON basket.id=basketitem.basket_id
+	INNER JOIN user
+	  ON user.consumer_id=basket.consumer_id
+	INNER JOIN consumer
+	on consumer.consumer_id=user.consumer_id
+	GROUP BY Gender,AgeGroup;]]>
+	</queryString>
+	<field name="Gender" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="AgeGroup" class="java.lang.String"/>
+	<field name="Drink" class="java.math.BigDecimal"/>
+	<field name="Electronic" class="java.math.BigDecimal"/>
+	<field name="Food" class="java.math.BigDecimal"/>
+	<field name="HouseHold" class="java.math.BigDecimal"/>
+	<field name="NewsPapers" class="java.math.BigDecimal"/>
+	<variable name="drink_sum" class="java.lang.Float" resetType="Group" resetGroup="gender" calculation="Sum">
+		<variableExpression><![CDATA[$F{Drink}]]></variableExpression>
+	</variable>
+	<variable name="electronic_sum" class="java.lang.Float" resetType="Group" resetGroup="gender" calculation="Sum">
+		<variableExpression><![CDATA[$F{Electronic}]]></variableExpression>
+	</variable>
+	<variable name="DRINK_SUM" class="java.lang.Float" resetType="Group" resetGroup="gender" calculation="Sum">
+		<variableExpression><![CDATA[$F{Drink}]]></variableExpression>
+	</variable>
+	<group name="gender">
+		<groupExpression><![CDATA[$F{Gender}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="50" height="20" uuid="5de04ebb-eeb1-4f90-987a-8344b62cce2d"/>
+					<textFieldExpression><![CDATA[$F{Gender}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="gender">
+					<reportElement x="50" y="0" width="100" height="20" uuid="19288a25-a021-4851-88e7-73dc14bd1b2d"/>
+					<textFieldExpression><![CDATA[$V{drink_sum}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="gender">
+					<reportElement x="150" y="0" width="100" height="20" uuid="2a77ba99-9900-40e2-98cd-cc1b513c45e5"/>
+					<textFieldExpression><![CDATA[$V{electronic_sum}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="50" y="0" width="100" height="20" uuid="faa1c0c5-7f3a-425a-8181-39abddecc384"/>
+				<text><![CDATA[Drink]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="0" width="100" height="20" uuid="ebba9946-1816-493b-8e40-40d8008f2e46"/>
+				<text><![CDATA[Electronic]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="0" width="100" height="20" uuid="e3b67c9d-a502-4ef5-886c-558c61c66409"/>
+				<text><![CDATA[Food]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="100" height="20" uuid="b2880edb-dadb-42f2-8cd0-106cadab4bf5"/>
+				<text><![CDATA[HouseHold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="100" height="20" uuid="42632319-2a78-4a75-9f7b-41cfeadebc65"/>
+				<text><![CDATA[NewsPapers]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="0" width="100" height="20" uuid="5866138c-c7ae-430b-a13b-990d1d3bec81"/>
+				<textFieldExpression><![CDATA[$F{Drink}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="100" height="20" uuid="181dd6a6-2e55-4d01-baf7-f0c5af506919"/>
+				<textFieldExpression><![CDATA[$F{Electronic}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="100" height="20" uuid="4712adcd-5738-4709-b9b3-fcb57d149f66"/>
+				<textFieldExpression><![CDATA[$F{Food}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="100" height="20" uuid="5b54cb47-ba45-447c-87f4-d3e12084945d"/>
+				<textFieldExpression><![CDATA[$F{HouseHold}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="0" width="100" height="20" uuid="26adea39-d161-4d3f-a27f-2ba1adb11b24"/>
+				<textFieldExpression><![CDATA[$F{NewsPapers}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="50" height="20" uuid="67cb59d4-e85b-4416-a858-ee03d73cf863"/>
+				<textFieldExpression><![CDATA[$F{AgeGroup}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<textField evaluationTime="Column">
+				<reportElement x="50" y="0" width="100" height="20" uuid="69072040-f1cc-40d6-9f31-e95e251784c1"/>
+				<textFieldExpression><![CDATA[$V{DRINK_SUM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

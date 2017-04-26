@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FridayTask" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="1369d08b-7b1d-45d4-867a-cd47b4c52424">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="AgeGroupvs ProductGroup" uuid="358f8b65-ca47-4516-94de-d0455421bbe6">
+		<queryString>
+			<![CDATA[SELECT
+bi.description,
+pg.name,
+sum(bi.original_item_price) as sum,
+case
+    when YEAR(NOW()) - YEAR(c.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(c.dob , '%m%d')) between 26 and 35 then '26-35'
+    when YEAR(NOW()) - YEAR(c.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(c.dob , '%m%d')) between 36 and 45 then '36-45'
+    when YEAR(NOW()) - YEAR(c.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(c.dob , '%m%d')) between 46 and 55 then '46-55'
+	else '56-65' end as ageGroup,
+u.gender
+FROM basketitem AS bi
+INNER JOIN basket AS b
+ON b.id=bi.basket_id
+INNER JOIN productgroup AS pg
+ON bi.product_group_id=pg.product_group_id
+INNER JOIN user as u
+on u.consumer_id=b.consumer_id
+INNER JOIN consumer as c
+on c.consumer_id=u.consumer_id
+GROUP BY pg.name,u.gender
+ORDER BY u.gender,pg.name;]]>
+		</queryString>
+		<field name="description" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="sum" class="java.math.BigDecimal"/>
+		<field name="ageGroup" class="java.lang.String"/>
+		<field name="gender" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset1" uuid="472024ee-37ea-4608-ae35-87d72f5db321">
+		<queryString>
+			<![CDATA[SELECT
+bi.description,
+pg.name,
+sum(bi.original_item_price) as sum,
+case
+    when YEAR(NOW()) - YEAR(c.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(c.dob , '%m%d')) between 26 and 35 then '26-35'
+    when YEAR(NOW()) - YEAR(c.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(c.dob , '%m%d')) between 36 and 45 then '36-45'
+    when YEAR(NOW()) - YEAR(c.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(c.dob , '%m%d')) between 46 and 55 then '46-55'
+	else '56-65' end as ageGroup,
+u.gender
+FROM basketitem AS bi
+INNER JOIN basket AS b
+ON b.id=bi.basket_id
+INNER JOIN productgroup AS pg
+ON bi.product_group_id=pg.product_group_id
+INNER JOIN user as u
+on u.consumer_id=b.consumer_id
+INNER JOIN consumer as c
+on c.consumer_id=u.consumer_id
+GROUP BY pg.name,u.gender
+ORDER BY u.gender,pg.name;]]>
+		</queryString>
+		<field name="description" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="sum" class="java.math.BigDecimal"/>
+		<field name="ageGroup" class="java.lang.String"/>
+		<field name="gender" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset2" uuid="60e1db8d-5606-4676-a9ce-38a5cc7d0161">
+		<queryString>
+			<![CDATA[	SELECT
+	  user.gender,
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35,basketitem.original_item_price, NULL)) as 'D',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45,basketitem.original_item_price, NULL)) as 'E',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55,basketitem.original_item_price, NULL)) as 'F',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 56 and 65,basketitem.original_item_price, NULL)) as 'H',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 66 and 99,basketitem.original_item_price, NULL)) as 'N'
+	FROM
+	  productgroup
+	INNER JOIN basketitem
+	  ON basketitem.product_group_id=productgroup.id
+	INNER JOIN basket
+	  ON basket.id=basketitem.basket_id
+	INNER JOIN user
+	  ON user.consumer_id=basket.consumer_id
+	INNER JOIN consumer
+	on consumer.consumer_id=user.consumer_id
+	GROUP BY user.gender,productgroup.name;]]>
+		</queryString>
+		<field name="gender" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="D" class="java.math.BigDecimal"/>
+		<field name="E" class="java.math.BigDecimal"/>
+		<field name="F" class="java.math.BigDecimal"/>
+		<field name="H" class="java.math.BigDecimal"/>
+		<field name="N" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="dataset1" uuid="11dee15d-f7aa-4473-aacc-800af9d07a58">
+		<queryString>
+			<![CDATA[	SELECT
+	  user.gender,
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35,basketitem.original_item_price, NULL)) as 'D',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45,basketitem.original_item_price, NULL)) as 'E',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55,basketitem.original_item_price, NULL)) as 'F',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 56 and 65,basketitem.original_item_price, NULL)) as 'H',
+	SUM(IF(YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 66 and 99,basketitem.original_item_price, NULL)) as 'N'
+	FROM
+	  productgroup
+	INNER JOIN basketitem
+	  ON basketitem.product_group_id=productgroup.id
+	INNER JOIN basket
+	  ON basket.id=basketitem.basket_id
+	INNER JOIN user
+	  ON user.consumer_id=basket.consumer_id
+	INNER JOIN consumer
+	on consumer.consumer_id=user.consumer_id
+	GROUP BY user.gender,productgroup.name;]]>
+		</queryString>
+		<field name="gender" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="D" class="java.math.BigDecimal"/>
+		<field name="E" class="java.math.BigDecimal"/>
+		<field name="F" class="java.math.BigDecimal"/>
+		<field name="H" class="java.math.BigDecimal"/>
+		<field name="N" class="java.math.BigDecimal"/>
+		<group name="group1"/>
+	</subDataset>
+	<subDataset name="dataset2" uuid="6dede388-5526-4341-ab5b-16692b1fc0e4"/>
+	<queryString>
+		<![CDATA[SELECT
+  user.gender,
+SUM(IF(productgroup.name = 'Drink',basketitem.original_item_price, NULL)) as 'Drink',
+SUM(IF(productgroup.name = 'Electronic',basketitem.original_item_price, NULL)) as 'Electronic',
+SUM(IF(productgroup.name = 'Food',basketitem.original_item_price, NULL)) as 'Food',
+SUM(IF(productgroup.name = 'HouseHold',basketitem.original_item_price, NULL)) as 'HouseHold',
+SUM(IF(productgroup.name = 'NewsPaper',basketitem.original_item_price, NULL)) as 'NewsPapers'
+FROM
+  productgroup
+INNER JOIN basketitem
+  ON basketitem.product_group_id=productgroup.id
+INNER JOIN basket
+  ON basket.id=basketitem.basket_id
+INNER JOIN user
+  ON user.consumer_id=basket.consumer_id
+GROUP BY user.gender;]]>
+	</queryString>
+	<field name="gender" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Drink" class="java.math.BigDecimal"/>
+	<field name="Electronic" class="java.math.BigDecimal"/>
+	<field name="Food" class="java.math.BigDecimal"/>
+	<field name="HouseHold" class="java.math.BigDecimal"/>
+	<field name="NewsPapers" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="45" y="0" width="100" height="20" uuid="86001efd-03ad-4a54-bc2b-fbbf6f5cd8ec"/>
+				<text><![CDATA[Drink]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="145" y="0" width="100" height="20" uuid="4e831a01-5471-482e-a811-3d3f3b220196"/>
+				<text><![CDATA[Electronic]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="0" width="100" height="20" uuid="595e1e9e-96d1-4aff-9026-794a3e35d3f4"/>
+				<text><![CDATA[Food]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="0" width="100" height="20" uuid="21a485a1-f97f-4d99-a8c3-236fe75c1fcb"/>
+				<text><![CDATA[HouseHold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="0" width="100" height="20" uuid="a08a34d3-51cf-4934-885a-0f22fbbb97eb"/>
+				<text><![CDATA[NewsPapers]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="45" height="20" uuid="abae8dac-539f-4dcd-90bf-3e7722681161"/>
+				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="0" width="100" height="20" uuid="8de71fb0-4457-421a-bb1d-8cc316ac3383"/>
+				<textFieldExpression><![CDATA[$F{Drink}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="145" y="0" width="100" height="20" uuid="e046db63-a7da-42c2-bf26-bd38eb48a50d"/>
+				<textFieldExpression><![CDATA[$F{Electronic}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="0" width="100" height="20" uuid="fea8b7ff-a6f4-4849-8f5f-b12b57e1afe7"/>
+				<textFieldExpression><![CDATA[$F{Food}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="345" y="0" width="100" height="20" uuid="81333434-1a3f-4e82-9d64-62e19f66cbd5"/>
+				<textFieldExpression><![CDATA[$F{HouseHold}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="0" width="100" height="20" uuid="42ed7835-3209-48ea-93f0-ba3b11e88385"/>
+				<textFieldExpression><![CDATA[$F{NewsPapers}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="45" y="20" width="500" height="20" uuid="ff45c4b2-b3b9-4be2-a5af-7af2bfec9b39"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataset2" uuid="65e6915e-eda5-4752-bb89-4bdad2eb938e">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="20" width="500">
+						<textField>
+							<reportElement x="0" y="0" width="100" height="20" uuid="080b51e9-1f21-4311-92ef-8aaab958e6bd"/>
+							<textFieldExpression><![CDATA[$F{D}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="100" y="0" width="100" height="20" uuid="a0b2a879-3d75-4651-aaa7-291ec3541d90"/>
+							<textFieldExpression><![CDATA[$F{E}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="300" y="0" width="100" height="20" uuid="fc2df357-85b5-4d05-b109-c43fff0bd175"/>
+							<textFieldExpression><![CDATA[$F{H}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="400" y="0" width="100" height="20" uuid="bbe12583-befe-4dba-b290-d12b1d730cb8"/>
+							<textFieldExpression><![CDATA[$F{N}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="226" y="6" width="100" height="20" uuid="aa3fa51a-269b-425b-bff5-eb616e0607a5"/>
+							<textFieldExpression><![CDATA[$F{F}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField>
+				<reportElement x="260" y="6" width="100" height="20" uuid="d99d007b-406d-4abb-8042-6691fffee2c7"/>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

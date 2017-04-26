@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ThursdayTask" language="groovy" pageWidth="812" pageHeight="792" columnWidth="772" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="136e8fe2-8e8f-4021-aae7-e0bb8dc4f1ee">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="213"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Thursday"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/services/repository"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="ProductBasketItemJoin" uuid="900fa01d-ca2f-4505-8734-9e46824acc14">
+		<queryString>
+			<![CDATA[SELECT p.name,
+b.quantity
+FROM product as p
+INNER JOIN basketitem as b
+ON b.sku=p.sku;]]>
+		</queryString>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="quantity" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="chartdata" uuid="ed0579f6-cc00-49ed-94d1-f26cbf62caaf">
+		<queryString>
+			<![CDATA[SELECT p.name,
+COUNT(CASE WHEN b.quantity = 1 THEN 1 END) AS "1",
+COUNT(CASE WHEN b.quantity = 2 THEN 1 END) AS "2",
+COUNT(CASE WHEN b.quantity = 3 THEN 1 END) AS "3",
+COUNT(CASE WHEN b.quantity = 4 THEN 1 END) AS "4",
+COUNT(b.quantity) AS "GrandTotal"
+FROM product as p
+INNER JOIN basketitem as b
+ON b.sku=p.sku
+GROUP BY p.name;]]>
+		</queryString>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="1" class="java.lang.Long"/>
+		<field name="2" class="java.lang.Long"/>
+		<field name="3" class="java.lang.Long"/>
+		<field name="4" class="java.lang.Long"/>
+		<field name="GrandTotal" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/anshul/Downloads/LearningJasperReports/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 1;]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="478" splitType="Stretch">
+			<crosstab>
+				<reportElement x="0" y="0" width="373" height="478" uuid="b81fe0e3-e657-4f92-9460-2a27eb2e158a"/>
+				<crosstabDataset>
+					<dataset>
+						<datasetRun subDataset="ProductBasketItemJoin" uuid="be29befb-ef3a-4f3c-a91e-11426a03837e">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<rowGroup name="name" width="94" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{name}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" uuid="9e073666-0a96-40d3-a836-f2fabb75dd8b"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="25" uuid="00554fb2-390b-4892-9477-b9f135032bb2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total name]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="quantity" height="30" totalPosition="End">
+					<bucket class="java.lang.Integer">
+						<bucketExpression><![CDATA[$F{quantity}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="30" uuid="a2767eb2-e9b4-4730-9742-ffcf0fcb21a7"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{quantity}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="30" uuid="7371799c-cd8c-400c-8f9d-2d86d4b9d63b"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<text><![CDATA[Total quantity]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="quantityMeasure" class="java.lang.Integer" calculation="Count">
+					<measureExpression><![CDATA[$F{quantity}]]></measureExpression>
+				</measure>
+				<crosstabCell width="51" height="25">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="a8afb1b6-4948-47db-83ba-d7fd716a7e70"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$V{quantityMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="51" height="26" rowTotalGroup="name">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="1" width="50" height="25" uuid="366a1181-cc41-400c-b21a-64645e2401bb"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$V{quantityMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="52" columnTotalGroup="quantity">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="9085deec-464c-4454-9dbf-d64a134f2318"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$V{quantityMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="52" height="26" rowTotalGroup="name" columnTotalGroup="quantity">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="1" width="50" height="25" uuid="5a6663bc-2db8-4c2f-b9f2-d5f0322a74a9"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$V{quantityMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<barChart>
+				<chart>
+					<reportElement x="389" y="11" width="383" height="467" uuid="a3bbcb38-0c66-4859-ba9c-db11377d68dc"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="chartdata" uuid="8d9e21ba-8e00-451b-9fe7-1d35457aff84"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Product Quantity Total"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{name}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{GrandTotal}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot labelRotation="90.0"/>
+					<itemLabel/>
+					<categoryAxisFormat labelRotation="90.0">
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

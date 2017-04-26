@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProductBasketItemCount" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="84ba94e8-2285-4888-b9b5-bb2375c9c886">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/productbasket"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/services/repository"/>
+	<subDataset name="ProductBasketItemJoin" uuid="83b747a9-e478-4fd6-9066-1983234a2e8e">
+		<queryString>
+			<![CDATA[SELECT p.name,
+COUNT(CASE WHEN b.quantity = 1 THEN 1 END) AS "1",
+COUNT(CASE WHEN b.quantity = 2 THEN 1 END) AS "2",
+COUNT(CASE WHEN b.quantity = 3 THEN 1 END) AS "3",
+COUNT(CASE WHEN b.quantity = 4 THEN 1 END) AS "4",
+COUNT(b.quantity) AS "GrandTotal"
+FROM product as p
+INNER JOIN basketitem as b
+ON b.sku=p.sku
+GROUP BY p.name;]]>
+		</queryString>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="1" class="java.lang.Long"/>
+		<field name="2" class="java.lang.Long"/>
+		<field name="3" class="java.lang.Long"/>
+		<field name="4" class="java.lang.Long"/>
+		<field name="GrandTotal" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/anshul/Downloads/LearningJasperReports/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 1;]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="411" splitType="Stretch">
+			<pieChart>
+				<chart isShowLegend="false" customizerClass="jfreecustomization.PieChart_AWT">
+					<reportElement x="353" y="0" width="399" height="411" uuid="ecc903ee-114d-4a89-ba32-04e8111ee15f"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Top"/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="ProductBasketItemJoin" uuid="7dc5452c-e6b4-432a-b37c-3d5ba4fec977"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{name}]]></keyExpression>
+					<valueExpression><![CDATA[$F{GrandTotal}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<subreport runToBottom="false">
+				<reportElement x="0" y="0" width="61" height="104" uuid="f4b65ea1-864d-4b2b-996c-dd1bfe2edba1"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:ProductBasketItemCount_subreport2.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="21" splitType="Stretch"/>
+	</summary>
+</jasperReport>
