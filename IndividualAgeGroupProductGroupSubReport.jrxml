@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IndividualAgeGroupProductGroupMainReport" language="groovy" pageWidth="862" pageHeight="792" columnWidth="822" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="7e88870f-63ad-4bd3-aa92-7b11c35cc669">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="28"/>
+	<subDataset name="AgevsProductComparison" uuid="15e053a8-6457-48e6-8b9a-8614d39f6a5e">
+		<queryString>
+			<![CDATA[SELECT
+product.name,
+productgroup.name as productgroup,
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35 THEN basketitem.original_item_price ELSE 0 END) AS '26-35f',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45 THEN basketitem.original_item_price ELSE 0 END) AS '36-45f',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55 THEN basketitem.original_item_price ELSE 0 END) AS '46-55f',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 56 and 65 THEN basketitem.original_item_price ELSE 0 END) AS '56-65f',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35 THEN basketitem.original_item_price ELSE 0 END) AS '26-35m',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45 THEN basketitem.original_item_price ELSE 0 END) AS '36-45m',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55 THEN basketitem.original_item_price ELSE 0 END) AS '46-55m',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 56 and 65 THEN basketitem.original_item_price ELSE 0 END) AS '56-65m',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 16 and 95 THEN basketitem.original_item_price ELSE 0 END) AS 'TotalF',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 16 and 95 THEN basketitem.original_item_price ELSE 0 END) AS 'TotalM',
+SUM(basketitem.original_item_price) as sum
+FROM basketitem
+INNER JOIN product
+ON basketitem.sku=product.sku
+INNER JOIN productgroup
+ON product.product_group_id=productgroup.product_group_id
+INNER JOIN basket
+ON basket.id=basketitem.basket_id
+INNER JOIN user
+ON user.consumer_id=basket.consumer_id
+INNER JOIN consumer
+ON consumer.consumer_id=user.consumer_id
+GROUP BY productgroup.name,product.name]]>
+		</queryString>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="productgroup" class="java.lang.String"/>
+		<field name="26-35f" class="java.math.BigDecimal"/>
+		<field name="36-45f" class="java.math.BigDecimal"/>
+		<field name="46-55f" class="java.math.BigDecimal"/>
+		<field name="56-65f" class="java.math.BigDecimal"/>
+		<field name="26-35m" class="java.math.BigDecimal"/>
+		<field name="36-45m" class="java.math.BigDecimal"/>
+		<field name="46-55m" class="java.math.BigDecimal"/>
+		<field name="56-65m" class="java.math.BigDecimal"/>
+		<field name="TotalF" class="java.math.BigDecimal"/>
+		<field name="TotalM" class="java.math.BigDecimal"/>
+		<field name="sum" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/anshul/Downloads/LearningJasperReports/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 1;]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="326" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="124" height="147" uuid="eac9b753-619f-4fe8-815f-d0907819fb17"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "IndividualProductAgeGroupReport.jasper"]]></subreportExpression>
+			</subreport>
+			<barChart>
+				<chart>
+					<reportElement x="584" y="84" width="238" height="242" uuid="8a1ba6f7-c241-498d-9959-967d65a4e1a7"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="AgevsProductComparison" uuid="2cac67e4-54ae-42d8-9222-a7982cd147d9"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Dummy Series"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{productgroup}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{sum}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot labelRotation="60.0"/>
+					<itemLabel/>
+					<categoryAxisFormat labelRotation="60.0">
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

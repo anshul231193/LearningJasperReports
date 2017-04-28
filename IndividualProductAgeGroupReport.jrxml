@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IndividualProductAgeGroupReport" language="groovy" pageWidth="782" pageHeight="792" columnWidth="742" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="8652d35c-3109-4d8a-bb81-5d04e58bf718">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+product.name,
+productgroup.name as productgroup,
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35 THEN basketitem.original_item_price ELSE 0 END) AS '26-35f',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45 THEN basketitem.original_item_price ELSE 0 END) AS '36-45f',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55 THEN basketitem.original_item_price ELSE 0 END) AS '46-55f',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 56 and 65 THEN basketitem.original_item_price ELSE 0 END) AS '56-65f',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 26 and 35 THEN basketitem.original_item_price ELSE 0 END) AS '26-35m',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 36 and 45 THEN basketitem.original_item_price ELSE 0 END) AS '36-45m',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 46 and 55 THEN basketitem.original_item_price ELSE 0 END) AS '46-55m',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 56 and 65 THEN basketitem.original_item_price ELSE 0 END) AS '56-65m',
+SUM(CASE WHEN user.gender = 'f' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 16 and 95 THEN basketitem.original_item_price ELSE 0 END) AS 'TotalF',
+SUM(CASE WHEN user.gender = 'm' AND YEAR(NOW()) - YEAR(consumer.dob) - (DATE_FORMAT(NOW(), '%m%d') < DATE_FORMAT(consumer.dob , '%m%d')) between 16 and 95 THEN basketitem.original_item_price ELSE 0 END) AS 'TotalM'
+FROM basketitem
+INNER JOIN product
+ON basketitem.sku=product.sku
+INNER JOIN productgroup
+ON product.product_group_id=productgroup.product_group_id
+INNER JOIN basket
+ON basket.id=basketitem.basket_id
+INNER JOIN user
+ON user.consumer_id=basket.consumer_id
+INNER JOIN consumer
+ON consumer.consumer_id=user.consumer_id
+GROUP BY productgroup.name,product.name]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="productgroup" class="java.lang.String"/>
+	<field name="26-35f" class="java.math.BigDecimal"/>
+	<field name="36-45f" class="java.math.BigDecimal"/>
+	<field name="46-55f" class="java.math.BigDecimal"/>
+	<field name="56-65f" class="java.math.BigDecimal"/>
+	<field name="26-35m" class="java.math.BigDecimal"/>
+	<field name="36-45m" class="java.math.BigDecimal"/>
+	<field name="46-55m" class="java.math.BigDecimal"/>
+	<field name="56-65m" class="java.math.BigDecimal"/>
+	<field name="TotalF" class="java.math.BigDecimal"/>
+	<field name="TotalM" class="java.math.BigDecimal"/>
+	<variable name="26-35f_sum" class="java.lang.Float" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{26-35f}]]></variableExpression>
+	</variable>
+	<variable name="36-45f_sum" class="java.lang.Float" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{36-45f}]]></variableExpression>
+	</variable>
+	<variable name="46-55f_sum" class="java.lang.Float" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{46-55f}]]></variableExpression>
+	</variable>
+	<variable name="56-65f_sum" class="java.lang.Float" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{56-65f}]]></variableExpression>
+	</variable>
+	<variable name="totalf_sum" class="java.lang.Float">
+		<variableExpression><![CDATA[$F{TotalF}]]></variableExpression>
+	</variable>
+	<variable name="TotalF_1" class="java.math.BigDecimal" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{TotalF}]]></variableExpression>
+	</variable>
+	<variable name="26-35m_1" class="java.math.BigDecimal" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{26-35m}]]></variableExpression>
+	</variable>
+	<variable name="36-45m_1" class="java.math.BigDecimal" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{36-45m}]]></variableExpression>
+	</variable>
+	<variable name="46-55m_1" class="java.math.BigDecimal" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{46-55m}]]></variableExpression>
+	</variable>
+	<variable name="56-65m_1" class="java.math.BigDecimal" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{56-65m}]]></variableExpression>
+	</variable>
+	<variable name="TotalM_1" class="java.math.BigDecimal" resetType="Group" resetGroup="productgroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{TotalM}]]></variableExpression>
+	</variable>
+	<group name="productgroup">
+		<groupExpression><![CDATA[$F{productgroup}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="156" height="20" backcolor="#ECDFDD" uuid="e118daa5-84d9-4781-ba4e-526efd59f14f"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{productgroup}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup" pattern="###0.00">
+					<reportElement mode="Opaque" x="145" y="0" width="58" height="20" backcolor="#ECDFDD" uuid="33f64303-5e65-4716-a458-a5b9a4ed5d01"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{26-35f_sum}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="203" y="0" width="58" height="20" backcolor="#ECDFDD" uuid="d42df9a2-0eef-481a-bf85-29b3c1bb2cbe"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{36-45f_sum}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup" pattern="###0.00">
+					<reportElement mode="Opaque" x="261" y="0" width="57" height="20" backcolor="#ECDFDD" uuid="cdc4d4eb-a279-4bdf-99d4-694108860a29"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{46-55f_sum}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="318" y="0" width="45" height="20" backcolor="#ECDFDD" uuid="02f8a62a-c75b-4af8-ae49-7e1f6927ceee"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{56-65f_sum}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="363" y="0" width="68" height="20" backcolor="#ECDFDD" uuid="39b85cc3-7585-499b-9eaf-31f132939ee0"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TotalF_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="431" y="0" width="50" height="20" backcolor="#ECDFDD" uuid="a6a3870a-8d1b-4a1a-bdc4-30b16f823e2a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{26-35m_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="481" y="0" width="50" height="20" backcolor="#ECDFDD" uuid="9d323e58-6ceb-4dae-8f0e-27f0045ad144"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{36-45m_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="531" y="0" width="48" height="20" backcolor="#ECDFDD" uuid="f2de25e1-0508-4e9f-a05f-e3018f7e34d4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{46-55m_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="579" y="0" width="59" height="20" backcolor="#ECDFDD" uuid="497b7613-8df8-44df-a346-a9a5303f69a9"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{56-65m_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="productgroup">
+					<reportElement mode="Opaque" x="638" y="0" width="76" height="20" backcolor="#ECDFDD" uuid="2b99174b-f78d-4371-a20f-adbb50a454ca"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TotalM_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="3"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="19" width="714" height="1" backcolor="#99A166" uuid="2708feae-8db9-45b4-8f0e-3147eb298a51"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="-1" width="714" height="20" backcolor="#BCB58C" uuid="5430cf3d-0e22-4a77-b9ec-791437f54b83"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="626" y="0" width="88" height="20" forecolor="#FFFFFF" backcolor="#BCB58C" uuid="7c553ab7-3254-4871-8c74-6e86079476e3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[mTotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="431" y="0" width="207" height="20" forecolor="#FFFFFF" backcolor="#BCB58C" uuid="da33b3ee-d9e3-442f-a9db-af4213572af7"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[m]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="381" height="20" forecolor="#FFFFFF" backcolor="#BCB58C" uuid="54ee565f-7c58-4579-9def-105811de6780"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[                                                f]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="381" y="0" width="50" height="20" forecolor="#FFFFFF" backcolor="#BCB58C" uuid="ebf5a3a4-25ff-4c7f-96af-ff405ee046ca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[fTotal]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="203" y="0" width="58" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="7f20d2f0-7967-488c-90c4-7dbacd2eb6be"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[36-45]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="481" y="0" width="50" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="197d043e-89cc-4d5d-8735-80a6c3e3cff9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[36-45]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="156" height="20" backcolor="#897F4A" uuid="86dbdcf8-03aa-4323-9d11-d0066f564893"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="133" y="0" width="80" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="d079aded-d096-4816-aa8a-a06bc40f5c72"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[26-35]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="261" y="0" width="57" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="9a39a40f-1a7a-470b-a919-5feaf0564214"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[46-55]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="626" y="0" width="88" height="20" backcolor="#897F4A" uuid="19f369f3-fed0-4a02-8a68-d1ee5c1a31aa"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="579" y="0" width="59" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="163d26ca-d5c6-482e-8499-fb0f5c8effaf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[56-65]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="531" y="0" width="48" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="8c337df2-1bd2-46f0-a27e-fdf73e7dae45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[46-55]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="421" y="0" width="63" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="bfab8b84-7896-40d9-a35e-e8cd681425fb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[26-35]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="363" y="0" width="68" height="20" backcolor="#897F4A" uuid="58cd815d-cee6-4710-a032-2d8adce9e685"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="318" y="0" width="45" height="20" forecolor="#FFFFFF" backcolor="#897F4A" uuid="88464a8e-457a-4d1d-83ed-d8c38f3f9e3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[56-65]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="381" height="1" forecolor="#FFFFFF" uuid="ccfb3531-dd07-4610-afaf-8a4e054fd8ee"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="145" height="20" uuid="cc922008-ed60-45ba-a7b3-acda5c270971"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="145" y="0" width="58" height="20" uuid="840cd56c-2301-4b4a-9024-ca482162f77c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{26-35f}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="203" y="0" width="58" height="20" uuid="35c61d8f-540c-428d-999f-a071b32d3a4b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{36-45f}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="261" y="0" width="57" height="20" uuid="3850fc1a-d1ad-4d1c-8769-b185032c2a5e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{46-55f}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="318" y="0" width="45" height="20" uuid="1ffe5276-c0f7-4bba-98b2-3011d5e583a9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{56-65f}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="363" y="0" width="68" height="20" uuid="063190c6-a159-4459-8893-3a8d6723c9f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalF}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="431" y="0" width="50" height="20" uuid="5bed88f6-1b8f-4031-b305-67b3a102b7ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{26-35m}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="481" y="0" width="50" height="20" uuid="d82d3806-00ce-4bae-a373-db3fbd8c28cc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{36-45m}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="531" y="0" width="48" height="20" uuid="c592f0f9-cc4b-4e0b-a253-b89e56777353"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{46-55m}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="579" y="0" width="59" height="20" uuid="868fe8eb-6f3b-4711-8444-8af84c6d1ec3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{56-65m}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="638" y="0" width="76" height="20" uuid="e87d95cd-f72b-44bc-be44-f23a8394edc0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
